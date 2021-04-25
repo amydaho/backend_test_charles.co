@@ -19,7 +19,7 @@ describe main do
   before do
     @rental_calculator1 = RentalCalculator.new(total_days, price_per_day, price_per_km, distance )
     @rental_calculator2 = RentalCalculator.new(total_days, price_per_day, price_per_km, distance )
-    @commission         = Commission.new
+    @commission         = Commission.new(decreased_value, total_days)
 
   end
   describe "when file is not empty" do
@@ -37,15 +37,15 @@ describe main do
     end
 
     it 'return insurance fee' do
-      _(@commission.get_insurance_fee(decreased_value)).must_be :==, 2500
+      _(@commission.get_insurance_fee).must_be :==, 2500
     end
 
     it 'return assistance fee' do
-      _(@commission.get_assistance_fee(total_days)).must_be :==, 1000
+      _(@commission.get_assistance_fee).must_be :==, 1000
     end
 
     it 'return drivy fee' do
-      _(@commission.get_drivy_fee(decreased_value, insurance_fee, assistance_fee)).must_be :==, 1500
+      _(@commission.get_drivy_fee).must_be :==, 1500
     end
   end
 end

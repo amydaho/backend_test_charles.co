@@ -9,24 +9,21 @@ def main
   begin
     file = File.open('data/input.json')
 
-    data = merge_rentals_data(file)
+    rentals_data = merge_rentals_data(file)
     rentals = []
     result = {}
 
-    data.map do |d|
+    rentals_data.map do |rental|
       res = {}
-      h_commission = {}
-      rental_calculator = RentalCalculator.new(d["day_count"], d["price_per_day"], d["price_per_km"], d["distance"])
+      rental_calculator = RentalCalculator.new(rental["day_count"], rental["price_per_day"], rental["price_per_km"], rental["distance"])
       price = rental_calculator.calculate_total_amount
-      decreased_value = rental_calculator.get_decreased_value(price, 30)
-      res["id"] = d["id"]
-      res["price"] = price
 
-      commission = Commission.new(decreased_value, d["day_count"])
-      h_commission["insurance_fee"] = commission.get_insurance_fee
-      h_commission["assistance_fee"] = commission.get_assistance_fee
-      h_commission["drivy_fee"] = commission.get_drivy_fee
-      res["commission"] = h_commission
+      decreased_value = rental_calculator.get_decreased_value(price, 30)
+
+      commission = Commission.new(decreased_value, rental["day_count"])
+
+      res["id"] = rental["id"]
+      res["actions"] = commission.get_actions(price)
       rentals << res
     end
     result["rentals"] = rentals
