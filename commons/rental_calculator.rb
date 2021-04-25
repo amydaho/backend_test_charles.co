@@ -5,7 +5,7 @@ class RentalCalculator
 
   PERCENT10 = 10
   PERCENT30 = 30
-  PERCENT50 = 30
+  PERCENT50 = 50
 
   def initialize(total_days, price_per_day, price_per_km, distance)
     @total_days = total_days
@@ -19,14 +19,21 @@ class RentalCalculator
     when 1
       @price_per_day + calculate_price_per_km(@price_per_km, @distance)
     when 2..4
-      @price_per_day + value_per_day_per_percent(@total_days - 1, @price_per_day, 10) + calculate_price_per_km(@price_per_km, @distance)
+      get_decreased_value_10_percent(@price_per_day, @total_days) + calculate_price_per_km(@price_per_km, @distance)
     when 5..10
-      @price_per_day + max_for_10_percent(@price_per_day) + value_per_day_per_percent(@total_days - 4, @price_per_day, 30) + calculate_price_per_km(@price_per_km, @total_days)
+     get_decreased_value_30_percent(@price_per_day, @total_days) + calculate_price_per_km(@price_per_km, @total_days)
     else
-      @price_per_day + max_for_10_percent(@price_per_day) + max_for_30_percent(@price_per_day) + value_per_day_per_percent(@total_days - 10, @price_per_day, 50) + calculate_price_per_km(@price_per_km, @distance)
+      get_decreased_value_50_percent(@price_per_day, @total_days) + calculate_price_per_km(@price_per_km, @distance)
     end
   end
 
+  ##
+  # Method: Montant de la reduction
+  # @param : price_per_day: int
+  ##
+  def get_decreased_value(price, percent)
+    price * percent / 100
+  end
   private
   ##
   # Method: Calcule des montant par jour
@@ -66,14 +73,6 @@ class RentalCalculator
   ##
   def max_for_30_percent(price_per_day)
     6 * (price_per_day - get_decreased_value(price_per_day, PERCENT30))
-  end
-
-  ##
-  # Method: Montant de la reduction
-  # @param : price_per_day: int
-  ##
-  def get_decreased_value(price_per_day, percent)
-    price_per_day * percent / 100
   end
 
   ##

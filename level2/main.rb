@@ -1,7 +1,7 @@
 require 'json'
 require 'date'
-require_relative 'rental_calculator.rb'
-require_relative 'data_merger.rb'
+require_relative '../commons/rental_calculator.rb'
+require_relative '../commons/data_merger.rb'
 
 
 def main
